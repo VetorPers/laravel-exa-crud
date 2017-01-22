@@ -39,20 +39,9 @@ class DummyClass extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'mat_name' => 'required',
-            'mat_type' => 'required|integer',
-            'mat_price' => 'required',
-            'mat_nums' => 'required|integer',
-        ]);
+        $requestData = $request->all();
 
-        $materiel = new Materiel();
-        $materiel->mat_name = $request->get('mat_name');
-        $materiel->mat_type = $request->get('mat_type');
-        $materiel->mat_price = $request->get('mat_price');
-        $materiel->mat_nums = $request->get('mat_nums');
-
-        if ($materiel->save()) {
+        if ({{modelName}}::create($requestData)) {
             return redirect('admin/materiel');
         } else {
             return redirect()->back()->withInput()->withErrors('保存失败！');
@@ -67,7 +56,7 @@ class DummyClass extends Controller
      */
     public function show($id)
     {
-        //
+        return view('{{viewPath}}{{viewName}}.show')->withInf({{modelName}}::findOrFail($id));
     }
 
     /**
@@ -78,7 +67,7 @@ class DummyClass extends Controller
      */
     public function edit($id)
     {
-        return view('materiel/edit')->with('inf', Materiel::find($id));
+        return view('{{viewPath}}{{viewName}}.edit')->withInf({{modelName}}::findOrFail($id));
     }
 
     /**
@@ -90,20 +79,11 @@ class DummyClass extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'mat_name' => 'required',
-            'mat_type' => 'required|integer',
-            'mat_price' => 'required|numeric',
-            'mat_nums' => 'required|integer',
-        ]);
+        $requestData = $request->all();
 
-        $materiel = Materiel::find($id);
-        $materiel->mat_name = $request->get('mat_name');
-        $materiel->mat_type = $request->get('mat_type');
-        $materiel->mat_price = $request->get('mat_price');
-        $materiel->mat_nums = $request->get('mat_nums');
+        $modelData = {{modelName}}::findOrFail($id);
 
-        if ($materiel->save()) {
+        if ($modelData->update($requestData)) {
             return redirect()->back();
         } else {
             return redirect()->back()->withInput()->withErrors('更新失败！');
@@ -118,7 +98,7 @@ class DummyClass extends Controller
      */
     public function destroy($id)
     {
-        Materiel::find($id)->delete();
+        {{modelName}}::destroy($id);
         return redirect()->back()->withInput()->withErrors('删除成功！');
     }
 

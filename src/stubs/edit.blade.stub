@@ -1,0 +1,89 @@
+@extends('layouts.app')
+
+@section('htmlheader_title')
+    物料管理
+@endsection
+
+@section('nav_1st')
+    物料
+@endsection
+
+@section('nav_2nd')
+    编辑
+@endsection
+
+@section('main-content')
+    <div class="container spark-screen">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-heading">物料管理</div>
+
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <strong>失败!</strong> 输入不符合要求<br><br>
+                            {!! implode('<br>', $errors->all()) !!}
+                        </div>
+                    @endif
+
+                    <div class="panel-body">
+                        <form action="{{url('admin/materiel/'.$inf->id)}}" method="POST" class="form-horizontal">
+                            {{ method_field('PATCH') }}
+                            {{ csrf_field() }}
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">名称</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" required="required" name="mat_name"
+                                           value="{{$inf->mat_name}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">类型</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" name="mat_type">
+                                        @foreach(Setting::getMatType() as $key=>$val)
+                                            <option value="{{$key}}" @if($key == $inf->mat_type) selected="selected" @endif>{{$val}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">价格(元)</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" required="required" name="mat_price"
+                                           value="{{$inf->mat_price}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">数量(个)</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" required="required" name="mat_nums"
+                                           value="{{$inf->mat_nums}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-info" id="upd">修改</button>
+                                    <a href="{{url('admin/materiel')}}" class="btn btn-default">返回</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@push('scripts')
+<script type="text/javascript">
+    $('#goodadmin').addClass('active');
+</script>
+@endpush
+
+
+

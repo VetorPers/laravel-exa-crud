@@ -1,0 +1,97 @@
+@extends('layouts.app')
+
+@section('htmlheader_title')
+    物料管理
+@endsection
+
+@section('nav_1st')
+    物料
+@endsection
+
+@section('nav_2nd')
+    列表
+@endsection
+
+
+@section('main-content')
+    <div class="container spark-screen">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-heading">物料管理</div>
+
+                    <div class="panel-body">
+
+                        <div class="clearfix">
+                            <div class="text-left">
+                                <a href="{{ url('admin/materiel/create') }}" class="btn btn-primary">新增</a>
+                            </div>
+                            <div class="text-right">
+                                <div style="display: inline-block">
+                                    <label class="btn btn-default" for="xFile">导入</label>
+                                    <form action="{{url('admin/excel/import/materiel')}}" method="post"
+                                          enctype="multipart/form-data" id="import1">
+                                        {!! csrf_field() !!}
+                                        <input type="file" id="xFile" name="xFile"
+                                               style="position:absolute;clip:rect(0 0 0 0);" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                    </form>
+                                </div>
+                                {{--<a href="{{url('admin/excel/import/goods')}}" class="btn btn-default">导入</a>--}}
+                                <a href="{{url('admin/excel/export/materiel')}}" class="btn btn-default"
+                                   style="display: inline-block">导出</a>
+                            </div>
+                        </div>
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th class="center">编号</th>
+                                <th class="center">名称</th>
+                                <th class="center">类型</th>
+                                <th class="center">单价</th>
+                                <th class="center">数量</th>
+                                <th class="center">更新时间</th>
+                                <th class="center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($lists as $list)
+                                <tr>
+                                    <td class="center">{{ $list->id }}</td>
+                                    <td class="center">{{ $list->mat_name }}</td>
+                                    <td class="center">{{Setting::getMatType($list->mat_type)}}</td>
+                                    <td class="center">{{ $list->mat_price }}</td>
+                                    <td class="center">{{ $list->mat_nums }}</td>
+                                    <td class="center">{{ $list->updated_at }}</td>
+                                    <td class="center">
+                                            <a href="{{ url('admin/materiel/'.$list->id.'/edit') }}"
+                                               class="btn btn-success">编辑</a>
+                                            <form action="{{ url('admin/materiel/'.$list->id) }}" method="POST"
+                                                  style="display: inline;">
+                                                {{ method_field('DELETE') }}
+                                                {{ csrf_field() }}
+                                                <button type="submit" class="btn btn-danger">删除</button>
+                                            </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
+<script type="text/javascript">
+    $('#xFile').change(function () {
+        $('#import1').submit();
+    });
+</script>
+<script type="text/javascript">
+    $('#goodadmin').addClass('active');
+</script>
+
+@endpush
