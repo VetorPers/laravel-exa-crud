@@ -1,0 +1,125 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyRootNamespaceHttp\Requests;
+use DummyRootNamespaceHttp\Controllers\Controller;
+
+use DummyRootNamespace{{modelNamespace}}{{modelName}};
+use Illuminate\Http\Request;
+use Session;
+
+class DummyClass extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view('{{viewPath}}{{viewName}}.index')->withLists({{modelName}}::all());
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('{{viewPath}}{{viewName}}.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'mat_name' => 'required',
+            'mat_type' => 'required|integer',
+            'mat_price' => 'required',
+            'mat_nums' => 'required|integer',
+        ]);
+
+        $materiel = new Materiel();
+        $materiel->mat_name = $request->get('mat_name');
+        $materiel->mat_type = $request->get('mat_type');
+        $materiel->mat_price = $request->get('mat_price');
+        $materiel->mat_nums = $request->get('mat_nums');
+
+        if ($materiel->save()) {
+            return redirect('admin/materiel');
+        } else {
+            return redirect()->back()->withInput()->withErrors('保存失败！');
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        return view('materiel/edit')->with('inf', Materiel::find($id));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'mat_name' => 'required',
+            'mat_type' => 'required|integer',
+            'mat_price' => 'required|numeric',
+            'mat_nums' => 'required|integer',
+        ]);
+
+        $materiel = Materiel::find($id);
+        $materiel->mat_name = $request->get('mat_name');
+        $materiel->mat_type = $request->get('mat_type');
+        $materiel->mat_price = $request->get('mat_price');
+        $materiel->mat_nums = $request->get('mat_nums');
+
+        if ($materiel->save()) {
+            return redirect()->back();
+        } else {
+            return redirect()->back()->withInput()->withErrors('更新失败！');
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        Materiel::find($id)->delete();
+        return redirect()->back()->withInput()->withErrors('删除成功！');
+    }
+
+}

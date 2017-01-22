@@ -1,0 +1,32 @@
+{
+    "name": "vv/laravel-exa-crud",
+    "license": "MIT",
+    "description": "This is a crud operation.",
+    "keywords": [
+        "laravel",
+        "crud",
+        "view"
+    ],
+    "authors": [
+        {
+            "name": "vvXiao",
+            "email": "506969463@qq.com",
+            "homepage": "http://my.csdn.net/github_36361785"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": "^5.1"
+    },
+    "require-dev": {
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Vv\\ExaCrud\\": "src/"
+        },
+        "classmap": [
+
+        ]
+    }
+}
